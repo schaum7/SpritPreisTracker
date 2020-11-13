@@ -10,14 +10,17 @@ def get_spritpreise():
     soup = BeautifulSoup(r.content,"html.parser")
 
     _,_,datum,zeit,_ = soup.find(class_="datum mbottom").text.strip().split(" ")
-
-    preis_diesel = soup.find(class_="pfdiesel").text
-    preis_super = soup.find(class_="pfe5").text
-    preis_e10 = soup.find(class_="pfe10").text
+    row = [datum,zeit]
+    
+    row.append(soup.find(class_="pfdiesel").text) # Diesel
+    row.append(soup.find(class_="pfe5").text) # Super
+    row.append(soup.find(class_="pfe10").text) # E10
 
     with open('Benzinpreise.csv',"a", newline='') as f:
         w = writer(f)
-        w.writerow([datum,zeit,preis_diesel,preis_super,preis_e10])
+        w.writerow(row)
+    
+    print("wrote: ", row)
 
 
 scheduler = BlockingScheduler()
